@@ -1,0 +1,25 @@
+# Orchestration & AI
+langchain>=0.2.0
+langchain-core>=0.2.0
+langgraph>=0.1.8
+langchain-openai>=0.1.8
+langchain-groq>=0.1.4
+
+# Tools
+tavily-python>=0.3.3
+
+# Backend API
+fastapi>=0.111.0
+uvicorn>=0.30.0
+
+# Frontend
+streamlit>=1.35.0
+
+# Data Validation & Config
+pydantic>=2.7.0
+pydantic-settings>=2.2.1
+
+# Environment & Utilities
+python-dotenv>=1.0.1
+
+yfinance>=0.2.40
