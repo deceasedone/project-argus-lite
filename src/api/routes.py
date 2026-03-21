@@ -1,9 +1,11 @@
 # src/api/routes.py
 
+import traceback
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from src.workflows.research_graph import research_graph_app
 from src.workflows.finance_graph import finance_graph_app
+from src.core.config import settings
 
 # 1. Create a Router to group our endpoints
 router = APIRouter()
@@ -44,8 +46,23 @@ async def conduct_research(request: ResearchRequest):
         )
         
     except Exception as e:
-        # If anything crashes in the agent workflow, return a 500 error to the frontend
-        raise HTTPException(status_code=500, detail=str(e))
+        # If anything crashes in the agent workflow, print full traceback and return detailed 500 error
+        error_details = traceback.format_exc()
+        print("ERROR in research workflow:")
+        print(error_details)
+
+        # Check for common quota/rate limit errors and provide helpful messages
+        error_str = str(e).lower()
+        if "quota" in error_str or "rate limit" in error_str or "429" in error_str:
+            user_friendly_error = (
+                f"API quota exceeded. This happens when you reach the daily limit for your LLM provider. "
+                f"Try again tomorrow, or switch to a different provider in your .env file. "
+                f"Current provider: {settings.LLM_PROVIDER}. "
+                f"Available alternatives: groq (generous free tier), openai (paid), gemini (limited free tier)."
+            )
+            raise HTTPException(status_code=429, detail=user_friendly_error)
+        else:
+            raise HTTPException(status_code=500, detail=error_details)
 
 @router.post("/finance", response_model=ResearchResponse)
 async def conduct_financial_analysis(request: ResearchRequest):

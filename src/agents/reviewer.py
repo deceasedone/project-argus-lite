@@ -36,7 +36,8 @@ def reviewer_node(state: ResearchState) -> Dict[str, Any]:
     structured_llm = llm.with_structured_output(ReviewerDecision)
     
     # 2. Compile the research into a single string for the LLM to read
-    compiled_research = "\n\n".join(research_data)
+    compiled_research = "\n\n".join(research_data) if research_data else "No research data available."
+    print(f"-> Compiled research length: {len(compiled_research)} characters")
     
     # 3. If we hit the loop limit, FORCE the LLM to write the report with what it has.
     if current_revisions >= MAX_REVISIONS:
@@ -50,8 +51,11 @@ def reviewer_node(state: ResearchState) -> Dict[str, Any]:
         report_chain = force_prompt | llm
         result = report_chain.invoke({"query": query, "compiled_research": compiled_research})
         
+        print(f"-> Force report generated. Type: {type(result)}")
+        final_report_content = result.content if hasattr(result, 'content') else str(result)
+        
         return {
-            "final_report": result.content,
+            "final_report": final_report_content,
             "revision_count": current_revisions + 1
         }
     
@@ -66,7 +70,24 @@ def reviewer_node(state: ResearchState) -> Dict[str, Any]:
     ])
     
     eval_chain = evaluation_prompt | structured_llm
-    decision: ReviewerDecision = eval_chain.invoke({"query": query, "compiled_research": compiled_research})
+    try:
+        decision: ReviewerDecision = eval_chain.invoke({"query": query, "compiled_research": compiled_research})
+        print(f"-> Decision received. Is complete: {decision.is_complete}")
+    except Exception as e:
+        print(f"-> ERROR parsing decision: {e}")
+        print(f"-> Forcing report generation due to parsing error")
+        # Fallback: force report generation
+        force_prompt = ChatPromptTemplate.from_messages([
+            ("system", "You are an Expert Editor. Write a comprehensive final report in Markdown."),
+            ("human", "Original Query: {query}\n\nResearch Data:\n{compiled_research}")
+        ])
+        report_chain = force_prompt | llm
+        result = report_chain.invoke({"query": query, "compiled_research": compiled_research})
+        final_report_content = result.content if hasattr(result, 'content') else str(result)
+        return {
+            "final_report": final_report_content,
+            "revision_count": current_revisions + 1
+        }
     
     # 5. Update State based on the LLM's decision
     if decision.is_complete:

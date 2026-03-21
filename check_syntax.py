@@ -28,10 +28,5 @@ except Exception as e:
     print('Import error in src.api.server:')
     traceback.print_exc(file=sys.stdout)
 
-try:
-    # Need to add ui to path or just import ui.app
-    import ui.app
-    print('ui.app imported successfully')
-except Exception as e:
-    print('Import error in ui.app:')
-    traceback.print_exc(file=sys.stdout)
+# Removed ui.app import check - transitioned to Next.js frontend
+print('Next.js frontend (ui/argus-lite-ui/) - no Python imports to check')

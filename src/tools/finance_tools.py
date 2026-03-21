@@ -21,6 +21,13 @@ def get_stock_info(ticker: str) -> str:
             "Dividend Yield": info.get("dividendYield", "N/A")
         }
         
+        try:
+            earnings = stock.quarterly_income_stmt.loc['Net Income'].dropna()
+            if not earnings.empty:
+                metrics["Recent Qtr Net Income"] = f"${earnings.iloc[0]:,.2f}"
+        except Exception:
+            metrics["Recent Qtr Net Income"] = "Data unavailable"
+        
         # Format as a clean string for the LLM
         result = f"Financial Metrics for {ticker}:\n"
         for key, value in metrics.items():
