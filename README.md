@@ -48,3 +48,9 @@ npm run dev in ui/argus-lite-ui
 
 ## 🧠 Why this Architecture?
 Project Argus utilizes the **Strategy Pattern** for AI. The LangGraph State schema and routing logic remain 100% agnostic to the task. Adding a new capability (e.g., a "Legal Analysis Engine") simply requires writing new Tools and Prompts, without altering the underlying core infrastructure. 
+
+## FLOWCHARTS
+
+<img width="1408" height="768" alt="Gemini_Generated_Image_yk7mryk7mryk7mry" src="https://github.com/user-attachments/assets/3d082c35-7bf8-45c4-ba06-08fa08302222" />
+<img width="1408" height="768" alt="Gemini_Generated_Image_bh1gtobh1gtobh1g" src="https://github.com/user-attachments/assets/99431369-248e-4c6e-b443-d9b8eb17bb0d" />
+
