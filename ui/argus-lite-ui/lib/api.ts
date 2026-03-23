@@ -5,7 +5,8 @@ export interface EngineResult {
   iterations:   number
 }
 
-const API_BASE = 'http://localhost:8000/api/v1'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_BASE = `${API_URL}/api/v1`
 
 export async function runEngine(engine: EngineType, query: string): Promise<EngineResult> {
   let response: Response
@@ -16,7 +17,7 @@ export async function runEngine(engine: EngineType, query: string): Promise<Engi
       body: JSON.stringify({ query }),
     })
   } catch {
-    throw new Error('Cannot reach the backend. Is FastAPI running on localhost:8000?')
+    throw new Error(`Cannot reach the backend. Ensure the API is running at ${API_BASE}`)
   }
 
   if (!response.ok) {
