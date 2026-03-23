@@ -1,5 +1,3 @@
-# src/tools/finance_tools.py
-
 import yfinance as yf
 
 def get_stock_info(ticker: str) -> str:

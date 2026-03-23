@@ -1,5 +1,3 @@
-# src/agents/reviewer.py
-
 from pydantic import BaseModel, Field
 from typing import Dict, Any
 from langchain_core.prompts import ChatPromptTemplate

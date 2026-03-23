@@ -1,5 +1,3 @@
-# src/agents/finance_agents.py
-
 from typing import Dict, Any
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate

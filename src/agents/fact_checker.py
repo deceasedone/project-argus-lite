@@ -1,5 +1,3 @@
-# src/agents/fact_checker.py
-
 from typing import Dict, Any
 from langchain_core.prompts import ChatPromptTemplate
 from src.core.llm_factory import get_llm

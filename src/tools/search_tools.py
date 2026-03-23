@@ -1,5 +1,3 @@
-# src/tools/search_tools.py
-
 from tavily import TavilyClient
 from src.core.config import settings
 

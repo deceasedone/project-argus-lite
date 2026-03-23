@@ -1,5 +1,3 @@
-# src/api/server.py
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.api.routes import router
@@ -15,10 +13,10 @@ def create_app() -> FastAPI:
     # Add CORS middleware to handle cross-origin requests from the frontend
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # Allow all origins (for development)
-        allow_credentials=True,
-        allow_methods=["*"],  # Allow all methods (GET, POST, OPTIONS, etc.)
-        allow_headers=["*"],  # Allow all headers
+        allow_origins=["*"],   # Allows any frontend (Vercel, localhost) to connect
+        allow_credentials=False, # MUST BE FALSE when using "*" for origins
+        allow_methods=["*"],   
+        allow_headers=["*"],   
     )
 
     # Register our endpoints (/research and /finance)

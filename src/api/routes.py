@@ -1,5 +1,3 @@
-# src/api/routes.py
-
 import traceback
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
